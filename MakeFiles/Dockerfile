@@ -21,8 +21,7 @@ EXPOSE 622
 # 清理缓存减小容器体积
 RUN  apt-get autoclean && apt-get clean && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
-# Electrum  钱包默认开机不启动 需要登陆到ssh后手动开启 sshd如未自行启动，可登陆控制台手工启动，部分设备会有此问题
-CMD ["/usr/sbin/sshd","-D"]
-
 # 设置s6-overla:v${S6_OVERLAY_VERSION}全局的ENTRYPOINT
 ENTRYPOINT ["/init"]
+# Electrum  钱包默认开机不启动 需要登陆到ssh后手动开启 sshd如未自行启动，可登陆控制台手工启动，部分设备会有此问题
+CMD ["/usr/sbin/sshd"]
