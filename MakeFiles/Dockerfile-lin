@@ -1,10 +1,12 @@
-# 一致性构建镜像 buildah bud --no-cache -f Dockerfile -t 容器名
+# 一致性构建镜像 buildah bud --no-cache -f Dockerfile -t docker.io/aspnmy/debian-ssh:python3-s6-overlay-v12.7
 # support@e2bank.cn
+# debug:解决FUSE的依赖问题
+# 重新规划构建更小的中间镜像
 FROM aspnmy/debian-ssh:latest
 
 #### --构建主服务${S6_OVERLAY_SERVIES}语句-开始
 # 更新软件包列表
-RUN apt-get update && apt-get install -y python3-pyqt5 libsecp256k1-dev python3-cryptography gpg python3-setuptools python3-pip wget && mkdir /tmp_srv && wget https://raw.githubusercontent.com/spesmilo/electrum/master/pubkeys/ThomasV.asc && gpg --import ThomasV.asc
+RUN apt-get update && apt-get install -y python3-pyqt5 libsecp256k1-dev python3-cryptography gpg python3-setuptools python3-pip wget libfuse2 xterm && mkdir /tmp_srv && wget https://raw.githubusercontent.com/spesmilo/electrum/master/pubkeys/ThomasV.asc && gpg --import ThomasV.asc
 
 # 设置初始root密码
 RUN echo 'root:root@#1314' | chpasswd
