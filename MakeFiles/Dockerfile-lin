@@ -6,7 +6,7 @@ FROM aspnmy/debian-ssh:latest
 
 #### --构建主服务${S6_OVERLAY_SERVIES}语句-开始
 # 更新软件包列表
-RUN apt-get update && apt-get install -y python3-pyqt5 libsecp256k1-dev python3-cryptography gpg python3-setuptools python3-pip wget libfuse2 xterm && mkdir /tmp_srv && wget https://raw.githubusercontent.com/spesmilo/electrum/master/pubkeys/ThomasV.asc && gpg --import ThomasV.asc
+RUN apt-get update && apt-get install -y python3-pyqt5 libsecp256k1-dev python3-cryptography gpg python3-setuptools python3-pip wget libfuse2 xterm && mkdir /tmp_srv && wget https://raw.githubusercontent.com/spesmilo/electrum/master/pubkeys/ThomasV.asc && gpg --import ThomasV.asc && groupadd fuse && usermod -a -G fuse $USER
 
 # 设置初始root密码
 RUN echo 'root:root@#1314' | chpasswd
@@ -23,4 +23,4 @@ RUN  apt-get autoclean && apt-get clean && rm -rf /var/lib/apt/lists/* && rm -rf
 # 设置s6-overla:v${S6_OVERLAY_VERSION}全局的ENTRYPOINT
 ENTRYPOINT ["/init"]
 # Electrum  钱包默认开机不启动
-CMD [ "/usr/sbin/sshd","-D" ]
+CMD [ "/usr/sbin/sshd" ]
