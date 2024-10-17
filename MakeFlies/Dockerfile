@@ -1,8 +1,6 @@
-# 一致性构建镜像 buildah bud --no-cache -f dockerfiles -t 容器名
+# 一致性构建镜像 buildah bud --no-cache -f Dockerfile -t 容器名
 
-FROM aspnmy/debian:s6-overlay
-
-
+FROM aspnmy/debian-ssh:latest
 
 #### --构建主服务${S6_OVERLAY_SERVIES}语句-开始
 # 更新软件包列表
