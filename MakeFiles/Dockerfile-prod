@@ -1,0 +1,29 @@
+# 一致性构建镜像 buildah bud --no-cache -f Dockerfile -t 容器名
+
+FROM docker.io/aspnmy/debian-ssh:python3-s6-overlay-v12.7
+
+ARG Electrum_VERSION=4.5.6
+ARG Electrum_Name=Electrum-${Electrum_VERSION}
+ARG Electrum_Wallte_URL=https://download.electrum.org/${Electrum_VERSION}/${Electrum_Name}.tar.gz
+#### --构建主服务${S6_OVERLAY_SERVIES}语句-开始
+# 更新软件包列表
+ADD ${Electrum_Wallte_URL}  /tmp_srv 
+RUN tar -xvf /tmp_srv/${Electrum_Name}.tar.gz && python3 ${Electrum_Name}/run_electrum
+
+
+# 设置初始root密码
+RUN echo 'root:root@#1314' | chpasswd
+
+#### --构建主服务${S6_OVERLAY_SERVIES}语句-结束
+# 暴露50002端口
+EXPOSE 50002
+#EXPOSE 622
+
+# 清理缓存减小容器体积
+RUN  apt-get autoclean && apt-get clean && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+
+# 设置s6-overla:v${S6_OVERLAY_VERSION}全局的ENTRYPOINT
+ENTRYPOINT ["/init"]
+# Electrum  钱包默认开机不启动 需要登陆到ssh后手动开启 sshd如未自行启动，可登陆控制台手工启动，部分设备会有此问题
+# 生产环境如需开启sshd服务，请暴露622端口，可将下面命令改成 CMD ["/usr/sbin/sshd"]，钱包启动命令登陆ssh后手动执行
+CMD ["python3 Electrum-4.5.6/run_electrum"]

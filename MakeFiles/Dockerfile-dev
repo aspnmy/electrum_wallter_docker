@@ -25,4 +25,5 @@ RUN  apt-get autoclean && apt-get clean && rm -rf /var/lib/apt/lists/* && rm -rf
 # 设置s6-overla:v${S6_OVERLAY_VERSION}全局的ENTRYPOINT
 ENTRYPOINT ["/init"]
 # Electrum  钱包默认开机不启动 需要登陆到ssh后手动开启 sshd如未自行启动，可登陆控制台手工启动，部分设备会有此问题
+# 生产环境如需默认启动钱包，请关闭启动sshd并关闭622端口，可将下面命令改成 CMD ["python3 Electrum-4.5.6/run_electrum"]
 CMD ["/usr/sbin/sshd"]
