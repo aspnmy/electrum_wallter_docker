@@ -2,11 +2,13 @@
 
 FROM docker.io/aspnmy/debian-ssh:python3-s6-overlay-v12.7
 
+ARG Electrum_VERSION=4.5.6
+ARG Electrum_Name=Electrum-${Electrum_VERSION}.tar.gz
+ARG Electrum_Wallte_URL=https://download.electrum.org/${Electrum_VERSION}/${Electrum_Name}
 #### --构建主服务${S6_OVERLAY_SERVIES}语句-开始
 # 更新软件包列表
-ADD https://download.electrum.org/4.5.6/Electrum-4.5.6.tar.gz  /tmp_srv
-ADD https://download.electrum.org/4.5.6/Electrum-4.5.6.tar.gz.asc /tmp_srv 
-RUN gpg --verify /tmp_srv/Electrum-4.5.6.tar.gz.asc && python3 -m pip install --user /tmp_srv/Electrum-4.5.6.tar.gz
+ADD ${Electrum_Wallte_URL}  /tmp_srv 
+RUN python3 -m pip install --user /tmp_srv/${Electrum_Name}
 
 
 
