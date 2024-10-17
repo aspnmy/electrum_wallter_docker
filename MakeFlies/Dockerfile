@@ -7,7 +7,7 @@ FROM aspnmy/debian-ssh:latest
 RUN apt-get update && apt-get install -y python3-pyqt5 libsecp256k1-dev python3-cryptography gpg python3-setuptools python3-pip
 ADD https://download.electrum.org/4.5.6/Electrum-4.5.6.tar.gz  /tmp_srv
 ADD https://download.electrum.org/4.5.6/Electrum-4.5.6.tar.gz.asc /tmp_srv 
-ADD https://raw.githubusercontent.com/spesmilo/electrum/master/pubkeys/ThomasV.asc /tmp_srv
+RUN wget https://raw.githubusercontent.com/spesmilo/electrum/master/pubkeys/ThomasV.asc /tmp_srv
 RUN gpg --import /tmp_srv/ThomasV.asc && gpg --verify /tmp_srv/Electrum-4.5.6.tar.gz.asc && python3 -m pip install --user /tmp_srv/Electrum-4.5.6.tar.gz
 
 
