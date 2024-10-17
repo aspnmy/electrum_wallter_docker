@@ -4,10 +4,10 @@ FROM aspnmy/debian-ssh:latest
 
 #### --构建主服务${S6_OVERLAY_SERVIES}语句-开始
 # 更新软件包列表
-RUN apt-get update && apt-get install -y python3-pyqt5 libsecp256k1-dev python3-cryptography gpg python3-setuptools python3-pip wget
+RUN apt-get update && apt-get install -y python3-pyqt5 libsecp256k1-dev python3-cryptography gpg python3-setuptools python3-pip wget && mkdir /tmp_srv
 ADD https://download.electrum.org/4.5.6/Electrum-4.5.6.tar.gz  /tmp_srv
 ADD https://download.electrum.org/4.5.6/Electrum-4.5.6.tar.gz.asc /tmp_srv 
-RUN wget https://raw.githubusercontent.com/spesmilo/electrum/master/pubkeys/ThomasV.asc /tmp_srv
+ADD ThomasV.asc /tmp_srv
 RUN gpg --import /tmp_srv/ThomasV.asc && gpg --verify /tmp_srv/Electrum-4.5.6.tar.gz.asc && python3 -m pip install --user /tmp_srv/Electrum-4.5.6.tar.gz
 
 
