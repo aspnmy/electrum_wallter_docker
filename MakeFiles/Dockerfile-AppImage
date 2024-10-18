@@ -4,12 +4,12 @@
 FROM docker.io/aspnmy/debian-ssh:python3-s6-overlay-v12.7
 
 ARG Electrum_VERSION=4.5.6
-ARG Electrum_Name=Electrum-${Electrum_VERSION}
+ARG Electrum_Name=electrum-${Electrum_VERSION}
 ARG Electrum_Wallte_URL=https://download.electrum.org/${Electrum_VERSION}/${Electrum_Name}-x86_64.AppImage
 #### --构建主服务${S6_OVERLAY_SERVIES}语句-开始
 # 更新软件包列表
 ADD ${Electrum_Wallte_URL}  /tmp_srv 
-RUN mkdir /app && mv /tmp_srv/${Electrum_Name}.AppImage /app/electrum && chmod u+x /app/electrum
+RUN mkdir /app && mv /tmp_srv/${Electrum_Name}-x86_64.AppImage /app/electrum && chmod u+x /app/electrum
 WORKDIR /app
 
 # 设置初始root密码
