@@ -1,4 +1,4 @@
-# 一致性构建镜像 buildah bud --no-cache -f Dockerfile -t 容器名
+# 一致性构建镜像 buildah bud --no-cache -f Dockerfile -t electrum_wallter_docker
 # AppImage模式的构建形式
 # debug #1 https://github.com/aspnmy/electrum_wallter_docker/issues/1
 FROM docker.io/aspnmy/debian-ssh:python3-s6-overlay-v12.7
@@ -9,8 +9,8 @@ ARG Electrum_Wallte_URL=https://download.electrum.org/${Electrum_VERSION}/${Elec
 #### --构建主服务${S6_OVERLAY_SERVIES}语句-开始
 # 更新软件包列表
 ADD ${Electrum_Wallte_URL}  /tmp_srv 
-RUN mv /tmp_srv/${Electrum_Name}.AppImage /tmp_srv/electrum && chmod u+x /tmp_srv/electrum
-
+RUN mkdir /app && mv /tmp_srv/${Electrum_Name}.AppImage /app/electrum && chmod u+x /app/electrum
+WORKDIR /app
 
 # 设置初始root密码
 RUN echo 'root:root@#1314' | chpasswd
@@ -21,10 +21,10 @@ EXPOSE 50002
 #EXPOSE 622
 
 # 清理缓存减小容器体积
-RUN  apt-get autoclean && apt-get clean && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+RUN  apt-get autoclean && apt-get clean && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/* && rm -rf /tmp_srv/*
 
 # 设置s6-overla:v${S6_OVERLAY_VERSION}全局的ENTRYPOINT
 ENTRYPOINT ["/init"]
 # Electrum  钱包默认开机不启动 需要登陆到ssh后手动开启 sshd如未自行启动，可登陆控制台手工启动，部分设备会有此问题
 # 生产环境如需默认启动钱包，请关闭启动sshd并关闭622端口，可将下面命令改成 CMD ["python3 Electrum-4.5.6/run_electrum"]
-CMD ["/tmp_srv/electrum"]
+CMD ["./electrum"]
